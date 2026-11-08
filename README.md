@@ -4,7 +4,8 @@ A digital recreation of the Hasbro game 'Battleship' developed as part of the cl
 
 The weekly UML diagrams have their own top-level folder for ease of access.
 
-The weekly milestones/deadlines we are targeting are:
+**The weekly milestones/deadlines we are targeting are:**
+
     Week 3 - Minimum viable game mechanics and interface
     Week 4 - Functional single-player game
     Week 5 - Functional two-player game
@@ -12,7 +13,12 @@ The weekly milestones/deadlines we are targeting are:
     Week 7 - Optional rules
     Week 8 - Polish, refactoring, and documentation
 
-Created by Abdirahman Osman, 
-            Nicholas Fearing, 
-            Ricardo Bustamante-Frias, 
-            Zachary Pennington
+**Created by**
+
+Abdirahman Osman, 
+
+Nicholas Fearing, 
+
+Ricardo Bustamante-Frias, 
+
+Zachary Pennington
