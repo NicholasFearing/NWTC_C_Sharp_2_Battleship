@@ -1,0 +1,73 @@
+﻿<Window x:Class="Battleship_C_2.AboutWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Battleship_C_2"
+        mc:Ignorable="d"
+        Title="About Battleship"
+        Height="370" 
+        Width="420"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterOwner"
+        Background="#16243C">
+
+
+    <StackPanel Margin="25"
+                VerticalAlignment="Center">
+
+        <!-- Game title -->
+        <TextBlock Text="BATTLESHIP"
+                    FontSize="30"
+                    FontWeight="Bold"
+                    Foreground="White"
+                    HorizontalAlignment="Center"
+                    Margin="0,0,0,15"/>
+
+        <!-- Version and date -->
+        <TextBlock  Text="Version 0.1.0"
+                        Foreground="LightGray"
+                        HorizontalAlignment="Center"
+                        Margin="0,0,0,5"/>
+
+        <TextBlock Text="November 2026"
+           Foreground="LightGray"
+           HorizontalAlignment="Center"
+           Margin="0,0,0,15"/>
+
+        <!-- Credits -->
+        <TextBlock Text="Created By"
+                   FontSize="18"
+                   FontWeight="Bold"
+                   HorizontalAlignment="Center"
+                   Margin="0,0,0,5"/>
+
+        <TextBlock Text="Battleship Development Team"
+                   Foreground="White"
+                   HorizontalAlignment="Center"
+                   Margin="0,0,0,5"/>
+
+        <TextBlock Text="Abdirahman, Nicholas, Ricardo, Zachary"
+                   Foreground="LightGray"
+                   HorizontalAlignment="Center"
+                   Margin="0,0,0,20"/>
+
+
+        <!-- Project info -->
+        <TextBlock Text="Created using C# and WPF"
+                   Foreground="LightGray"
+                   HorizontalAlignment="Center"
+                   Margin="0,0,0,20"/>
+
+        <!-- Close button -->
+        <Button x:Name="CloseAboutButton"
+                Content="Close"
+                Width="120"
+                Height="35"
+                HorizontalAlignment="Center"
+                Click="CloseAboutButton_Click"/>
+
+
+
+    </StackPanel>
+</Window>
