@@ -24,13 +24,17 @@ namespace Game_Battleship
         public Cell[,] p2_board;
 
         // Constructor: Creates both game boards.
-        public GameBoard()
+        public GameBoard(MainWindow main)
         {
             // Creates a 10 x 10 array for Player 1.
             p1_board = new Cell[rows, columns];
 
             // Creates a 10 x 10 array for Player 2.
             p2_board = new Cell[rows, columns];
+
+            // Creates list to contain ships
+            //      this needs to be filled in
+            fleet = new List<Ship>();
 
             // Calls the method that initializes both boards.
             initializeboard();
@@ -70,7 +74,7 @@ namespace Game_Battleship
             foreach (Ship ship in fleet)
             {
                 // If at least one ship is not sunk, return false.
-                if (!ship.IsSunk())
+                if (!ship.IsSunk(this.p1_board))
                 {
                     return false;
                 }

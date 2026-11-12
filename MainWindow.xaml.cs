@@ -22,6 +22,9 @@ namespace Game_Battleship
         private int displayedPlayer = 1;
         private int nextDisplayedPlayer = 1;
 
+        //the instance of the game
+        public Game game;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -199,6 +202,8 @@ namespace Game_Battleship
             // Connect to GameBoard and Player later
             // row and col identify which cell was clicked
             // board identifies which grid was clicked
+            
+            //^^work in progress zone^^
 
             StatusText.Text =
                 "Selected: " +
@@ -287,6 +292,11 @@ namespace Game_Battleship
 
             about.Owner = this;
             about.ShowDialog();
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            game = new Game(this);
         }
     }
 }

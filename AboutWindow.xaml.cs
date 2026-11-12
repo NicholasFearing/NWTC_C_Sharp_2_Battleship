@@ -21,5 +21,11 @@ namespace Game_Battleship
         {
             InitializeComponent();
         }
+
+        private void CloseAboutButton_Click(object sender, RoutedEventArgs e)
+        {
+            //closes the pop-up window
+            this.Close();
+        }
     }
 }

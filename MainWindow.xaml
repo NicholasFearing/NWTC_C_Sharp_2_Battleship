@@ -5,7 +5,7 @@
         Width="650"
         MinWidth="550"
         SizeToContent="Height"
-        WindowStartupLocation="CenterScreen">
+        WindowStartupLocation="CenterScreen" Loaded="Window_Loaded">
 
     <DockPanel x:Name="MainPanel" Margin="15">
 

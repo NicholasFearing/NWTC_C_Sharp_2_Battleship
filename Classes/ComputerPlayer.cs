@@ -10,12 +10,13 @@ namespace Game_Battleship
     /// Represents CPU players; inherits from player class
     /// </summary>
     
-    //AI needs to be functional by week 6 of course
+    //AI needs to be fully functional by week 6 of class
+    //  & needs to be able to make random shots by week 4
     /*
     public class ComputerPlayer: Player
     {
         //fields
-        public string Difficulty;
+        public string difficulty;
 
         //methods
         public void SetDifficulty(string)
@@ -26,6 +27,6 @@ namespace Game_Battleship
 
         public (int row, int col) ChoosePosition()
         { }
-        */
-    }
+        
+    } */
 }

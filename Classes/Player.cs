@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design.Serialization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,11 +14,26 @@ namespace Game_Battleship
     public class Player
     {
         //fields
-        public string Name;
+        public string name;
 
-        public int Score;
+        public int score;
 
-        public int ShotsFired;
+        public int shotsFired;
+
+        public GameBoard board;
+
+        MainWindow mainContext;
+
+        ///constructor
+        public Player(MainWindow main)
+        {
+            name = "";
+
+            score = 0;
+            shotsFired = 0;
+            board = new GameBoard(main);
+            mainContext = main;
+        }
 
         //methods
 
@@ -33,14 +49,14 @@ namespace Game_Battleship
             //if the chosen cell has a ship on it, it is hit
             if (board[row, col].ContainsShip())
             {
-                board[row, col].Ship.TakeHit(position);
+                board[row, col].ship.TakeHit(position, this);
             }
             else { 
                 //mark cell as having been hit but empty
                 //display 'Miss!' message
             }
 
-            Game.switchTurn();
+            mainContext.game.SwitchTurn();    //bug; need to rewrite this line
         }
 
         /// <summary>
@@ -49,14 +65,15 @@ namespace Game_Battleship
        /* public void AddScore(int)
         { } */
 
-        /// Runs when a player runs out of ships
-        ///public bool HasLost()
-        ///{
-            ///bool hasLost = false;
+        /// runs when a player runs out of ships
+        /// not fully written yet
+        public bool hasLost()
+        {
+            bool hasLost = true;
             ///display win/lose message, 
             ///record player on leaderboard, 
             ///reset to main screen
-            ///return hasLost;
-        ///}
+            return hasLost;
+        }
     }
 }
