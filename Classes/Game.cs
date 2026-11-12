@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -33,13 +34,13 @@ namespace Game_Battleship
         public Player? winner;
 
         // Constructor: Initializes a new game.
-        public Game()
+        public Game(MainWindow main)
         {
             // Creates Player 1.
-            p1 = new Player();
+            p1 = new Player(main);
 
             // Creates Player 2.
-            p2 = new Player();
+            p2 = new Player(main);
 
             // Both players start as human players.
             p1IsCPU = false;
@@ -59,7 +60,7 @@ namespace Game_Battleship
         }
 
         //Starts or restarts the game.
-        public void startGame()
+        public void StartGame()
         {
             // Resets the turn counter.
             num_turns = 0;
@@ -74,16 +75,16 @@ namespace Game_Battleship
             winner = null;
 
             // Resets both players' scores.
-            p1.Score = 0;
-            p2.Score = 0;
+            p1.score = 0;
+            p2.score = 0;
 
             // Resets both players' shot counters.
-            p1.ShotsFired = 0;
-            p2.ShotsFired = 0;
+            p1.shotsFired = 0;
+            p2.shotsFired = 0;
         }
 
         // Switches between Player 1 and Player 2.
-        public void switchTurn()
+        public void SwitchTurn()
         {
             // Do not switch turns after the game ends.
             if (gameIsOver)
@@ -110,7 +111,7 @@ namespace Game_Battleship
         // Records the winner and ends the game.
                                          //// This is part of week two of game project, 
                                          /// we will finish wiring it up in the game then
-        //public void checkWinner()
+        //public void CheckWinner()
         //{
         //    // Checks whether Player 1 has lost.
         //    if (p1.HasLost())

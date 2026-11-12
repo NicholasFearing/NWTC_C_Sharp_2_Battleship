@@ -21,5 +21,27 @@ namespace Game_Battleship
         {
             InitializeComponent();
         }
+
+        private void MenuQuitButton_Click(object sender, RoutedEventArgs e)
+        {
+            //closes the program
+            this.Close();
+        }
+
+        private void MenuAboutButton_Click(object sender, RoutedEventArgs e)
+        {
+            //show information regarding developers, version
+            AboutWindow about = new AboutWindow();
+
+            about.Owner = this;
+            about.ShowDialog();
+        }
+
+        private void MenuStartButton_Click(object sender, RoutedEventArgs e)
+        {
+            //start a new game of battleship by loading MainWindow.xaml
+            MainWindow main = new MainWindow();
+            main.Show();
+        }
     }
 }
