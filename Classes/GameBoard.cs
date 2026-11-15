@@ -62,7 +62,7 @@ namespace Game_Battleship
         }
 
         // Checks whether all ships in the fleet are sunk.
-        public bool allshipssunk()
+        public bool allshipssunk(Cell[,] playerBoard)
         {
             // If there are no ships, the fleet is not considered sunk.
             if (fleet.Count == 0)
@@ -74,7 +74,7 @@ namespace Game_Battleship
             foreach (Ship ship in fleet)
             {
                 // If at least one ship is not sunk, return false.
-                if (!ship.IsSunk(this.p1_board))
+                if (ship.IsSunk(playerBoard) == false)
                 {
                     return false;
                 }

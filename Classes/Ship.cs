@@ -66,22 +66,27 @@ namespace Game_Battleship
             hits++;
         }
 
+
         public bool IsSunk(Cell[,] playerBoard)
         {
-            bool isSunk = true;
+            // An unplaced ship cannot be sunk
+            if (positions == null || positions.Count == 0)
+            {
+                return false;
+            }
 
-            int row = 0;
-            int col = 0;
+            // Check every position occupied by this ship
             foreach (int[] place in positions)
             {
                 if (playerBoard[place[0], place[1]].isHit == false)
                 {
-                    isSunk = false;
+                    return false;
                 }
             }
 
-            return isSunk;
+            return true;
         }
+
 
         /// <summary>
         /// Returns ships remaining unhit spots as int

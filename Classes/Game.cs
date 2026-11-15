@@ -109,28 +109,28 @@ namespace Game_Battleship
         }
 
         // Records the winner and ends the game.
-                                         //// This is part of week two of game project, 
-                                         /// we will finish wiring it up in the game then
-        //public void CheckWinner()
-        //{
-        //    // Checks whether Player 1 has lost.
-        //    if (p1.HasLost())
-        //    {
-        //        // Player 2 wins.
-        //        winner = p2;
+        //// This is part of week two of game project, 
+        /// we will finish wiring it up in the game then
+        public void CheckWinner()
+        {
+            // Checks whether Player 1 has lost.
+            if (p1.board.allshipssunk(p1.board.p1_board))
+            {
+                // Player 2 wins.
+                winner = p2;
 
-        //        // Ends the game.
-        //        gameIsOver = true;
-        //    }
-        //    // Checks whether Player 2 has lost.
-        //    else if (p2.HasLost())
-        //    {
-        //        // Player 1 wins.
-        //        winner = p1;
+                // Ends the game.
+                gameIsOver = true;
+            }
+            // Checks whether Player 2 has lost.
+            else if (p2.board.allshipssunk(p2.board.p2_board))
+            {
+                // Player 1 wins.
+                winner = p1;
 
-        //        // Ends the game.
-        //        gameIsOver = true;
-        //    }
-        //}
+                // Ends the game.
+                gameIsOver = true;
+            }
+        }
     }
 }
