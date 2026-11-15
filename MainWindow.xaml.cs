@@ -87,7 +87,7 @@ namespace Game_Battleship
             }
         }
 
-       // Creates the labels for all four boards
+        // Creates the labels for all four boards
         private void CreateLabels()
         {
             CreateBoardLabels(
@@ -102,9 +102,9 @@ namespace Game_Battleship
                 Player2TopColumnLabels,
                 Player2TopRowLabels);
 
-           CreateBoardLabels(
-                Player2BottomColumnLabels,
-                Player2BottomRowLabels);
+            CreateBoardLabels(
+                 Player2BottomColumnLabels,
+                 Player2BottomRowLabels);
         }
 
         private TextBlock MakeLabel(string text)
@@ -165,6 +165,31 @@ namespace Game_Battleship
             button.Background = color;
         }
 
+
+        private void DisplayAttackResult(
+            int playerNumber,
+            int row,
+            int col,
+            bool isHit)
+        {
+            // Check if the attack was a hit
+            if (isHit)
+            {
+                SetCellColor(
+                    playerNumber, true, row, col, Brushes.Red);
+
+                StatusText.Text = "HIT!";
+            }
+            else
+            {
+                SetCellColor(
+                    playerNumber, true, row, col, Brushes.Gray);
+
+                StatusText.Text = "MISS!";
+            }
+        }
+
+
         // Display only one players boards
         public void ShowPlayerBoards(int playerNumber)
         {
@@ -191,31 +216,66 @@ namespace Game_Battleship
         private void Cell_Click(
             object sender, RoutedEventArgs e)
         {
+            // Get the button that was clicked
             Button button = (Button)sender;
 
-            var (row, col) =
-                ((int, int))button.Tag;
+            // Get the row and column
+            var (row, col) = ((int, int))button.Tag;
 
-            UniformGrid board =
-                (UniformGrid)button.Parent;
+            // Find which board was clicked
+            UniformGrid board = (UniformGrid)button.Parent;
 
-            // Connect to GameBoard and Player later
-            // row and col identify which cell was clicked
-            // board identifies which grid was clicked
-            
-            //^^work in progress zone^^
+            // Check whether the top attack board was clicked
+            if (board == Player1TopGrid ||
+                board == Player2TopGrid)
+            {
+                // Hit selected
+                if (HitOption.IsChecked == true)
+                {
+                    DisplayAttackResult(
+                        displayedPlayer, row, col, true);
+                }
+                // Miss selected
+                else if (MissOption.IsChecked == true)
+                {
+                    DisplayAttackResult(
+                        displayedPlayer, row, col, false);
+                }
+                // Back to Blue selected
+                else if (ResetOption.IsChecked == true)
+                {
+                    SetCellColor(
+                        displayedPlayer, true, row, col,
+                        Brushes.DodgerBlue);
 
-            StatusText.Text =
-                "Selected: " +
-                ((char)('A' + col)) + (row + 1);
+                    StatusText.Text = "Shot marker cleared.";
+                }
+            }
+            else
+            {
+                // Bottom board is for ship placement
+                StatusText.Text =
+                    "Selected: " +
+                    ((char)('A' + col)) + (row + 1);
+            }
         }
+
 
         // Start game button
         private void StartButton_Click(
             object sender, RoutedEventArgs e)
         {
-            // Connect to Game.startGame() when merged
-            StatusText.Text = "Start Game selected.";
+            // Start the game
+            game.StartGame();
+
+            // Hide ship placement options and label
+            ShipPlacementControls.Visibility = Visibility.Collapsed;
+
+            // Hide the Start button
+            StartButton.Visibility = Visibility.Collapsed;
+
+            // Keep the shot tracking options visible
+            StatusText.Text = "Game started! Player 1's turn.";
         }
 
         // Show the turn switching screen

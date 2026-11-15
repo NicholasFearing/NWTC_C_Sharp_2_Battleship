@@ -34,8 +34,9 @@
                     Margin="0,0,0,10">
 
             <!-- Ship Selection -->
-            <StackPanel Orientation="Horizontal"
-                        Margin="0,0,0,10">
+            <StackPanel x:Name="ShipPlacementControls"
+            Orientation="Horizontal"
+            Margin="0,0,0,10">
 
                 <TextBlock Text="Select Ship:"
                            VerticalAlignment="Center"/>
