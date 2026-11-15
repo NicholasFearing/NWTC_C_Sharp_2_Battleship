@@ -165,6 +165,66 @@ namespace Game_Battleship
             button.Background = color;
         }
 
+<<<<<<< Updated upstream
+=======
+
+        private void DisplayAttackResult(
+            int playerNumber,
+            int row,
+            int col,
+            bool isHit)
+        {
+            // Check if the attack was a hit
+            if (isHit)
+            {
+                SetCellColor(
+                    playerNumber, true, row, col, Brushes.Red);
+
+                StatusText.Text = "HIT!";
+            }
+            else
+            {
+                SetCellColor(
+                    playerNumber, true, row, col, Brushes.Gray);
+
+                StatusText.Text = "MISS!";
+            }
+        }
+
+
+        public void DisplaySunkMessage(string shipName)
+        {
+            StatusText.Text = "You sunk the " + shipName + "!";
+        }
+
+
+
+        public void DisplayWinner()
+        {
+            if (game.gameIsOver == true)
+            {
+                string winningPlayer = "Player 2";
+
+                if (game.winner == game.p1)
+                {
+                    winningPlayer = "Player 1";
+                }
+
+                StatusText.Text = winningPlayer + " Wins!";
+
+                MessageBox.Show(
+                    winningPlayer + " Wins!",
+                    "Game Over");
+
+                // Stop further attacks
+                Player1TopGrid.IsEnabled = false;
+                Player2TopGrid.IsEnabled = false;
+            }
+        }
+
+
+
+>>>>>>> Stashed changes
         // Display only one players boards
         public void ShowPlayerBoards(int playerNumber)
         {

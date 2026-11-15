@@ -57,6 +57,17 @@ namespace Game_Battleship
             }
 
             mainContext.game.SwitchTurn();    //bug; need to rewrite this line
+
+            mainContext.game.CheckWinner();
+
+            if (mainContext.game.gameIsOver)
+            {
+                mainContext.DisplayWinner();
+                return;
+            }
+
+            // Only switch turns if the game continues
+            mainContext.game.SwitchTurn();
         }
 
         /// <summary>
