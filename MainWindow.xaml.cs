@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -87,7 +88,7 @@ namespace Game_Battleship
             }
         }
 
-       // Creates the labels for all four boards
+        // Creates the labels for all four boards
         private void CreateLabels()
         {
             CreateBoardLabels(
@@ -102,7 +103,7 @@ namespace Game_Battleship
                 Player2TopColumnLabels,
                 Player2TopRowLabels);
 
-           CreateBoardLabels(
+            CreateBoardLabels(
                 Player2BottomColumnLabels,
                 Player2BottomRowLabels);
         }
@@ -165,9 +166,7 @@ namespace Game_Battleship
             button.Background = color;
         }
 
-<<<<<<< Updated upstream
-=======
-
+        // Display whether an attack was a hit or miss
         private void DisplayAttackResult(
             int playerNumber,
             int row,
@@ -191,14 +190,13 @@ namespace Game_Battleship
             }
         }
 
-
+        // Announce when a ship has been sunk
         public void DisplaySunkMessage(string shipName)
         {
             StatusText.Text = "You sunk the " + shipName + "!";
         }
 
-
-
+        // Announce the winner and end the game
         public void DisplayWinner()
         {
             if (game.gameIsOver == true)
@@ -222,9 +220,6 @@ namespace Game_Battleship
             }
         }
 
-
-
->>>>>>> Stashed changes
         // Display only one players boards
         public void ShowPlayerBoards(int playerNumber)
         {
@@ -262,7 +257,7 @@ namespace Game_Battleship
             // Connect to GameBoard and Player later
             // row and col identify which cell was clicked
             // board identifies which grid was clicked
-            
+
             //^^work in progress zone^^
 
             StatusText.Text =
