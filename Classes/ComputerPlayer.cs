@@ -18,8 +18,15 @@ namespace Game_Battleship
         //fields
         public string difficulty;
 
+        public MainWindow mainContext;
+
+        public ComputerPlayer(MainWindow main, string difficulty) : Player(main)
+        {
+            this.mainContext = main;
+        }
+
         //methods
-        public void SetDifficulty(string)
+        public void SetDifficulty(string difficulty)
         { }
 
         public (int row, int col) ChooseAttack()
@@ -28,5 +35,6 @@ namespace Game_Battleship
         public (int row, int col) ChoosePosition()
         { }
         
-    } */
+    }
+        */
 }

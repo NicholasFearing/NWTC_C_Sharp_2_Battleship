@@ -25,6 +25,8 @@ namespace Game_Battleship
         //the instance of the game
         public Game game;
 
+        public (int, int) focus;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -202,8 +204,10 @@ namespace Game_Battleship
             // Connect to GameBoard and Player later
             // row and col identify which cell was clicked
             // board identifies which grid was clicked
-            
+
             //^^work in progress zone^^
+
+            this.focus = (row, col);
 
             StatusText.Text =
                 "Selected: " +
