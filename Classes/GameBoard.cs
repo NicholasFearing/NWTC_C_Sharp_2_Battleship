@@ -34,7 +34,14 @@ namespace Game_Battleship
 
             // Creates list to contain ships
             //      this needs to be filled in
-            fleet = new List<Ship>();
+            fleet = new List<Ship>() 
+            {
+                new Ship(main, "Carrier", 5),
+                new Ship(main, "Battleship", 4),
+                new Ship(main, "Destroyer", 3),
+                new Ship(main, "Submarine", 3),
+                new Ship(main, "Patrol Boat", 2)
+            };
 
             // Calls the method that initializes both boards.
             initializeboard();
