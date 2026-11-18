@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Battleship - Main Menu"
         Width="500"
-        Height="440"
+        Height="516"
         ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen"
         Background="#16243C">
@@ -36,7 +36,14 @@
                 Content="Quit"
                 Width="200"
                 Height="45"
+                Margin="0,0,0,12"
                 Click="MenuQuitButton_Click"/>
+        
+        <Button x:Name="ScoreboardButton"
+            Content="Scoreboard"
+            Width="200"
+            Height="45"
+            Click="ScoreboardButton_Click"/>
 
     </StackPanel>
 </Window>

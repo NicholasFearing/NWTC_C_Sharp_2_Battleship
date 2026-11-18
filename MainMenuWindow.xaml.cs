@@ -43,5 +43,13 @@ namespace Game_Battleship
             MainWindow main = new MainWindow();
             main.Show();
         }
+
+        private void ScoreboardButton_Click(object sender, RoutedEventArgs e)
+        {
+            ///WIP TODO create scoreboardWindow class 
+            /// to display scores in file created by ScoreboardData.cs
+            /* ScoreboardWindow scores = new ScoreboardWindow();
+            scores.Show(); */
+        }
     }
 }
