@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -9,7 +10,7 @@ namespace Game_Battleship
     public class GameBoard
     {
         // Stores the ships placed in the game.
-        public List<Ship> fleet = new List<Ship>();
+        public List<Ship> fleet;
 
         // Stores the number of rows.
         public int rows = 10;
@@ -34,7 +35,7 @@ namespace Game_Battleship
 
             // Creates list to contain ships
             //      this needs to be filled in
-            fleet = new List<Ship>() 
+            fleet = new List<Ship>()
             {
                 new Ship(main, "Carrier", 5),
                 new Ship(main, "Battleship", 4),
@@ -65,7 +66,9 @@ namespace Game_Battleship
             }
 
             // Clears the ship list when starting a new game.
-            fleet.Clear();
+            //this deletes the fleet which was just instantiated.
+            //new game creates new gameboard anyway, so it will have a cleared fleet.
+            //fleet.Clear();
         }
 
         // Checks whether all ships in the fleet are sunk.
@@ -89,6 +92,89 @@ namespace Game_Battleship
 
             // All ships in the fleet have sunk.
             return true;
+        }
+
+        // allows us to generate random positions
+        private Random random = new Random();
+
+
+        public void RandomEnemyShip(Ship ship)
+        {
+            bool shipPlaced = false;
+
+            while (!shipPlaced)
+            {
+                // Choose a random starting position.
+                int row = random.Next(0, rows);
+                int column = random.Next(0, columns);
+
+                // Choose a random direction.
+                bool horizontal = random.Next(0, 2) == 0;
+
+                // Check whether the ship fits.
+                if (horizontal && column + ship.size > columns)
+                {
+                    continue;
+                }
+
+                if (!horizontal && row + ship.size > rows)
+                {
+                    continue;
+                }
+
+                // Check whether another ship occupies these cells.
+                bool canPlace = true;
+
+                for (int i = 0; i < ship.size; i++)
+                {
+                    int newRow = row;
+                    int newColumn = column;
+
+                    if (horizontal)
+                    {
+                        newColumn += i;
+                    }
+                    else
+                    {
+                        newRow += i;
+                    }
+
+                    if (p1_board[newRow, newColumn].ship != null)
+                    {
+                        canPlace = false;
+                        break;
+                    }
+                }
+
+                // Try another position if cells are occupied.
+                if (!canPlace)
+                {
+                    continue;
+                }
+
+                // Place the ship.
+                for (int i = 0; i < ship.size; i++)
+                {
+                    int newRow = row;
+                    int newColumn = column;
+
+                    if (horizontal)
+                    {
+                        newColumn += i;
+                    }
+                    else
+                    {
+                        newRow += i;
+                    }
+
+                    p1_board[newRow, newColumn].ship = ship;
+
+                    ship.positions.Add(new int[] { newRow, newColumn });
+                }
+
+                fleet.Add(ship);
+                shipPlaced = true;
+            }
         }
     }
 }

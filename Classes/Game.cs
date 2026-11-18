@@ -13,7 +13,8 @@ namespace Game_Battleship
         public Player p1;
 
         // Stores Player 2.
-        public Player p2;
+        public ComputerPlayer p2;
+        //starting next week this will have to change
 
         // Indicates whether Player 1 is controlled by the computer.
         public bool p1IsCPU;
@@ -40,11 +41,13 @@ namespace Game_Battleship
             p1 = new Player(main);
 
             // Creates Player 2.
-            p2 = new Player(main);
+            p2 = new ComputerPlayer(main, "Easy");
 
             // Both players start as human players.
             p1IsCPU = false;
-            p2IsCPU = false;
+            p2IsCPU = true;
+            //p2 defaulting to cpu is for this week only;
+            //TODO change this back to false and let player options/setup decide
 
             // No turns have been played.
             num_turns = 0;
@@ -81,6 +84,18 @@ namespace Game_Battleship
             // Resets both players' shot counters.
             p1.shotsFired = 0;
             p2.shotsFired = 0;
+
+            if (p1IsCPU)
+            {
+                //run random ship placement here
+                
+            }
+
+            if (p2IsCPU)
+            {
+                //run random ship placement here
+                p2.ChoosePosition();
+            }
         }
 
         // Switches between Player 1 and Player 2.
@@ -95,11 +110,17 @@ namespace Game_Battleship
             // Checks whether it is Player 1's turn.
             if (currentplayer == p1)
             {
+                //sync the boards
+                p1.board.p2_board = p2.board.p1_board;
+
                 // Switches to Player 2.
                 currentplayer = p2;
             }
             else
             {
+                //sync boards
+                p2.board.p2_board = p1.board.p1_board;
+
                 // Switches to Player 1.
                 currentplayer = p1;
             }
@@ -123,7 +144,7 @@ namespace Game_Battleship
                 gameIsOver = true;
             }
             // Checks whether Player 2 has lost.
-            else if (p2.board.allshipssunk(p2.board.p2_board))
+            else if (p2.board.allshipssunk(p2.board.p1_board))
             {
                 // Player 1 wins.
                 winner = p1;
