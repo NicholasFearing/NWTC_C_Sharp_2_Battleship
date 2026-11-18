@@ -256,25 +256,88 @@ namespace Game_Battleship
             UniformGrid board =
                 (UniformGrid)button.Parent;
 
-            // Connect to GameBoard and Player later
-            // row and col identify which cell was clicked
-            // board identifies which grid was clicked
-
-            //^^work in progress zone^^
-
             this.focus = (row, col);
 
-            StatusText.Text =
-                "Selected: " +
-                ((char)('A' + col)) + (row + 1);
+            // Check whether the top attack board was clicked
+            if (board == Player1TopGrid ||
+                board == Player2TopGrid)
+            {
+                // Hit selected
+                if (HitOption.IsChecked == true)
+                {
+                    //fire on position
+                    game.currentplayer.Attack(row, col, game.currentplayer.board.p2_board);
+
+                    DisplayAttackResult(
+                        displayedPlayer, row, col, game.currentplayer.board.p2_board[row, col].isHit);
+                }
+                // Miss selected
+                else if (MissOption.IsChecked == true)
+                {
+                    DisplayAttackResult(
+                        displayedPlayer, row, col, false);
+                }
+                // Back to Blue selected
+                else if (ResetOption.IsChecked == true)
+                {
+                    SetCellColor(
+                        displayedPlayer, true, row, col,
+                        Brushes.DodgerBlue);
+
+                    StatusText.Text = "Shot marker cleared.";
+                }
+            }
+            else
+            {
+                // Bottom board is for ship placement
+                Ship currentShip = new Ship(this);
+
+                //find ship in dropdown
+                if (displayedPlayer == 1)
+                {
+                    foreach (Ship ship in this.game.p1.board.fleet)
+                    {
+                        if (this.ShipSelector.Text == ship.name)
+                        {
+                            currentShip = ship;
+                        }
+                    }
+                }
+                else
+                {
+                    //ship was not on list
+                }
+
+                if (currentShip.PlaceShip(game.currentplayer.board.p1_board, focus, out List<int[]> positions))
+                {
+                    foreach (int[] cell in positions)
+                    {
+                        SetCellColor(1, false, cell[0], cell[1], Brushes.Snow);
+                    } 
+                }
+
+                StatusText.Text =
+                    "Selected: " +
+                    ((char)('A' + col)) + (row + 1);
+            }
+
+            //switch turn after each shot;
+            //this is commented out as we are not switching turns this week
+            //game.SwitchTurn();
         }
 
         // Start game button
         private void StartButton_Click(
             object sender, RoutedEventArgs e)
         {
-            // Connect to Game.startGame() when merged
+            // Connect to Game.startGame()
+            game.StartGame();
+
+            game.p1.board.p2_board = game.p2.board.p1_board;
+
             StatusText.Text = "Start Game selected.";
+
+            StartButton.IsEnabled = false;
         }
 
         // Show the turn switching screen

@@ -47,8 +47,8 @@
                           SelectedIndex="0">
 
                     <ComboBoxItem Content="Carrier" Tag="5"/>
-                    <ComboBoxItem Content="Battleshipo" Tag="4"/>
-                    <ComboBoxItem Content="D3estroyer" Tag="3"/>
+                    <ComboBoxItem Content="Battleship" Tag="4"/>
+                    <ComboBoxItem Content="Destroyer" Tag="3"/>
                     <ComboBoxItem Content="Submarine" Tag="3"/>
                     <ComboBoxItem Content="Patrol Boat" Tag="2"/>
 

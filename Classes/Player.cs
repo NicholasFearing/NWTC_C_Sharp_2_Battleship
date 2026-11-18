@@ -22,7 +22,7 @@ namespace Game_Battleship
 
         public GameBoard board;
 
-        MainWindow mainContext;
+        public MainWindow mainContext;
 
         ///constructor
         public Player(MainWindow main)
@@ -51,12 +51,10 @@ namespace Game_Battleship
             {
                 board[row, col].ship.TakeHit(position, this);
             }
-            else { 
-                //mark cell as having been hit but empty
-                //display 'Miss!' message
+            else
+            {
+                //cell does not contain ship
             }
-
-            mainContext.game.SwitchTurn();    //bug; need to rewrite this line
 
             mainContext.game.CheckWinner();
 
@@ -67,7 +65,8 @@ namespace Game_Battleship
             }
 
             // Only switch turns if the game continues
-            mainContext.game.SwitchTurn();
+            //TODO commented out for this week so only p1 goes this week
+            //mainContext.game.SwitchTurn();
         }
 
         /// <summary>

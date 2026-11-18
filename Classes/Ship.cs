@@ -51,36 +51,44 @@ namespace Game_Battleship
         /// 
         public void TakeHit(int[] position, Player player)
         {
+            //TODO this code is ugly and unwieldy; it works right now,
+            //but we should be able to use game.currentPlayer to clean it up,
+            //or pass the player directly
+
             //flip hit cell's isHit bool
             if (mainContext.game.currentplayer == mainContext.game.p1)
             {
-                mainContext.game.p2.board.p2_board[position[0], position[1]].isHit = true;
-
-                //check if boat is sunk
-                if (IsSunk(mainContext.game.p2.board.p2_board))
+                //only change isHit if the cell hasn't been hit before
+                if (mainContext.game.p2.board.p1_board[position[0], position[1]].isHit == false)
                 {
-                    //display message "You sunk my [ship name]!"
-                    //remove ship from fleet list
+                    mainContext.game.p2.board.p1_board[position[0], position[1]].isHit = true;
+                    //add one to the ship's number of hits taken
+                    hits++;
+
+                    //check if boat is sunk
+                    IsSunk(mainContext.game.p2.board.p1_board);
                 }
-                ;
             }
             else
             {
-                mainContext.game.p1.board.p1_board[position[0], position[1]].isHit = true;
+                if (mainContext.game.p1.board.p1_board[position[0], position[1]].isHit == false)
+                {
+                    mainContext.game.p1.board.p1_board[position[0], position[1]].isHit = true;
 
-                //check if boat is sunk
-                if (this.IsSunk(mainContext.game.p1.board.p1_board)) ;
+                    hits++;
+
+                    //check if boat is sunk
+                    IsSunk(mainContext.game.p1.board.p1_board);
+                }
             }
-
-            //add one to the ship's number of hits taken
-            hits++;
         }
 
 
         public bool IsSunk(Cell[,] playerBoard)
         {
             // An unplaced ship cannot be sunk
-            if (positions == null || positions.Count == 0)
+            //TODO this always returns false, we need to figure out why
+            if (this.positions == null || this.positions.Count == 0)
             {
                 return false;
             }
@@ -93,7 +101,13 @@ namespace Game_Battleship
                     return false;
                 }
             }
+            //this section will only run if the ship has sunk
 
+            //display message "You sunk the [ship name]!"
+            mainContext.DisplaySunkMessage(this.name);
+
+            //remove ship from fleet list
+            mainContext.game.currentplayer.board.fleet.Remove(this);
             return true;
         }
 
@@ -118,7 +132,7 @@ namespace Game_Battleship
         }
 
 
-        public void PlaceShip(Cell[,] Playerboard)
+        public bool PlaceShip(Cell[,] Playerboard, (int, int) focus, out List<int[]> positions)
         {
             //vars to pass result from first if-else to second
             bool shipFits = false;
@@ -128,28 +142,44 @@ namespace Game_Battleship
             {
                 verticalAlign = false;
             }
-            /* do i need this chunk, when the playerboard is passed as argument?
-             * consider removal.
-            //determine which player is placing the ship
-            if (mainContext.game.currentplayer == mainContext.game.p1)
+
+            //determine whether ship is in row or column
+            if (verticalAlign == true)
             {
-                //Player one is the player
-                //pseudocode until I have uniformgrid example
-                //UniformGridNameHere.SelectedButton.
+                //vertical: check if ship fits onto board top to bottom
+                if (Playerboard.GetLength(0) >= this.size + focus.Item1)
+                {
+                    //ship fits on board
+                    int row = focus.Item1;
+                    int col = focus.Item2;
+                    bool shipAlready = false;
+
+                    //check that nothing is in the spots it would take up
+                    for (int i = 0; i < this.size; i++)
+                    {
+                        if (Playerboard[row, col].ContainsShip())
+                        {
+                            shipAlready = true;
+                        }
+                        row++;
+                    }
+
+                    if (!shipAlready)
+                    { shipFits = true; }
+                }
+                else
+                {
+                    //ship pokes off of map
+                }
             }
             else
             {
-            } */
-
-            //determine whether ship is in row or column
-            if (verticalAlign == false)
-            {
                 //horizontal: check if ship fits onto board left to right
-                if (Playerboard.GetLength(0) >= this.size + mainContext.focus.Item1 - 1)
+                if (Playerboard.GetLength(1) >= this.size + focus.Item2)
                 {
                     //ship fits on board
-                    int row = mainContext.focus.Item1;
-                    int col = mainContext.focus.Item2;
+                    int row = focus.Item1;
+                    int col = focus.Item2;
                     bool shipAlready = false;
 
                     //check that nothing is in the spots it would take up
@@ -167,31 +197,7 @@ namespace Game_Battleship
                 }
                 else
                 {
-                    //ship pokes off of map
-                }
-            }
-            else
-            {
-                //vertical: check if ship fits onto board top to bottom
-                if (Playerboard.GetLength(1) >= this.size + mainContext.focus.Item2 - 1)
-                {
-                    //ship fits on board
-                    int row = mainContext.focus.Item1;
-                    int col = mainContext.focus.Item2;
-                    bool shipAlready = false;
-
-                    //check that nothing is in the spots it would take up
-                    for (int i = 0; i < this.size; i++)
-                    {
-                        if (Playerboard[row, col].ContainsShip())
-                        {
-                            shipAlready = true;
-                        }
-                        row++;
-                    }
-
-                    if (!shipAlready)
-                    { shipFits = true; }
+                    //ship doesn't fit
                 }
             }
 
@@ -200,8 +206,8 @@ namespace Game_Battleship
                 //populate positions lists
                 //redeclare variables (redeclared instead of expanding scope to prevent
                 //previous code from changing position
-                int row = mainContext.focus.Item1;
-                int col = mainContext.focus.Item2;
+                int row = focus.Item1;
+                int col = focus.Item2;
                 if (verticalAlign)
                 {
                     //ship is in one column
@@ -221,19 +227,23 @@ namespace Game_Battleship
                     }
                 }
                 //update game board array
-                foreach (int[] position in positions)
+                foreach (int[] position in this.positions)
                 {
                     Playerboard[position[0], position[1]].ship = this;
                 }
 
-                //TODO gray out/disable option to place this ship in the ui, as it's already placed
-                //call method to update color of affected cells
+                //remove ship option from selector
+                mainContext.ShipSelector.Items.Remove(mainContext.ShipSelector.SelectedItem);
+
+                //TODO call method to update color of affected cells
             }
             else
             {
                 //ship can not be placed here; warn player the ship was not placed.
             }
 
+            positions = this.positions;
+            return shipFits;
         }
 
     }
