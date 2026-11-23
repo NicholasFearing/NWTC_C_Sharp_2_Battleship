@@ -25,9 +25,9 @@ namespace Game_Battleship
         public MainWindow mainContext;
 
         ///constructor
-        public Player(MainWindow main)
+        public Player(MainWindow main, string PlayerName)
         {
-            name = "";
+            name = "PlayerName";
 
             score = 0;
             shotsFired = 0;

@@ -25,7 +25,7 @@ namespace Game_Battleship
         private void MenuQuitButton_Click(object sender, RoutedEventArgs e)
         {
             //closes the program
-            this.Close();
+            Application.Current.Shutdown();
         }
 
         private void MenuAboutButton_Click(object sender, RoutedEventArgs e)
@@ -37,11 +37,27 @@ namespace Game_Battleship
             about.ShowDialog();
         }
 
-        private void MenuStartButton_Click(object sender, RoutedEventArgs e)
+
+        private void MenuStartButton_Click(
+            object sender, RoutedEventArgs e)
         {
-            //start a new game of battleship by loading MainWindow.xaml
-            MainWindow main = new MainWindow();
-            main.Show();
+            // Open player setup
+            PlayerSetupWindow setup = new PlayerSetupWindow();
+            setup.Owner = this;
+
+            if (setup.ShowDialog() == true)
+            {
+                // Create game window using entered names
+                MainWindow main = new MainWindow(
+                    setup.Player1Name,
+                    setup.Player2Name);
+
+                Application.Current.MainWindow = main;
+                main.Show();
+
+                Close();
+            }
         }
+
     }
 }

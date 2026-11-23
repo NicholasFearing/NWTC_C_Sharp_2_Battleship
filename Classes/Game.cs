@@ -13,7 +13,7 @@ namespace Game_Battleship
         public Player p1;
 
         // Stores Player 2.
-        public ComputerPlayer p2;
+        public Player p2;
         //starting next week this will have to change
 
         // Indicates whether Player 1 is controlled by the computer.
@@ -35,19 +35,17 @@ namespace Game_Battleship
         public Player? winner;
 
         // Constructor: Initializes a new game.
-        public Game(MainWindow main)
+        public Game(MainWindow main, string player1Name, string player2Name)
         {
             // Creates Player 1.
-            p1 = new Player(main);
+            p1 = new Player(main, player1Name);
 
             // Creates Player 2.
-            p2 = new ComputerPlayer(main, "Easy");
+            p2 = new Player(main, player2Name);
 
-            // Both players start as human players.
+            // Both players are human.
             p1IsCPU = false;
-            p2IsCPU = true;
-            //p2 defaulting to cpu is for this week only;
-            //TODO change this back to false and let player options/setup decide
+            p2IsCPU = false;
 
             // No turns have been played.
             num_turns = 0;
@@ -85,6 +83,7 @@ namespace Game_Battleship
             p1.shotsFired = 0;
             p2.shotsFired = 0;
 
+            /*
             if (p1IsCPU)
             {
                 //run random ship placement here
@@ -96,6 +95,7 @@ namespace Game_Battleship
                 //run random ship placement here
                 p2.ChoosePosition();
             }
+            */
         }
 
         // Switches between Player 1 and Player 2.
