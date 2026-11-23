@@ -1,4 +1,3 @@
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,14 +22,31 @@ namespace Game_Battleship
         private int displayedPlayer = 1;
         private int nextDisplayedPlayer = 1;
 
+        // Stores the selected attack position
+        private int selectedShotRow = -1;
+        private int selectedShotCol = -1;
+
+        // Tracks whether the player has fired this turn
+        private bool shotFiredThisTurn = false;
+
+        // Track completed ship placements
+        private bool player1PlacementReady = false;
+        private bool player2PlacementReady = false;
+
+        private string player1Name;
+        private string player2Name;
+
         //the instance of the game
         public Game game;
 
         public (int, int) focus;
 
-        public MainWindow()
+        public MainWindow(string name1, string name2)
         {
             InitializeComponent();
+
+            player1Name = name1;
+            player2Name = name2;
 
             CreateLabels();
 
@@ -258,35 +274,66 @@ namespace Game_Battleship
 
             this.focus = (row, col);
 
-            // Check whether the top attack board was clicked
+            // Do not allow a previously fired square to be selected
+            if (button.Background == Brushes.Red ||
+                button.Background == Brushes.Gray)
+            {
+                StatusText.Text = "You already fired at this square.";
+                return;
+            }
+
+
+            // Select an attack position on the top board
             if (board == Player1TopGrid ||
                 board == Player2TopGrid)
             {
-                // Hit selected
-                if (HitOption.IsChecked == true)
+                // Prevent more than one shot per turn
+                if (shotFiredThisTurn)
                 {
-                    //fire on position
-                    game.currentplayer.Attack(row, col, game.currentplayer.board.p2_board);
+                    StatusText.Text = "You have already fired this turn.";
+                    return;
+                }
 
-                    DisplayAttackResult(
-                        displayedPlayer, row, col, game.currentplayer.board.p2_board[row, col].isHit);
-                }
-                // Miss selected
-                else if (MissOption.IsChecked == true)
+                // Do not allow shots after the game ends
+                if (game.gameIsOver)
                 {
-                    DisplayAttackResult(
-                        displayedPlayer, row, col, false);
+                    return;
                 }
-                // Back to Blue selected
-                else if (ResetOption.IsChecked == true)
+
+
+                // Restore the previous selected square to blue
+                if (selectedShotRow != -1 && selectedShotCol != -1)
                 {
                     SetCellColor(
-                        displayedPlayer, true, row, col,
+                        displayedPlayer,
+                        true,
+                        selectedShotRow,
+                        selectedShotCol,
                         Brushes.DodgerBlue);
-
-                    StatusText.Text = "Shot marker cleared.";
                 }
+
+                // Save the newly selected square
+                selectedShotRow = row;
+                selectedShotCol = col;
+
+                // Highlight the selected square yellow
+                SetCellColor(
+                    displayedPlayer,
+                    true,
+                    row,
+                    col,
+                    Brushes.Gold);
+
+                // Enable Confirm Shot
+                ConfirmShotButton.IsEnabled = true;
+
+
+                StatusText.Text =
+                    "Selected " +
+                    ((char)('A' + col)) + (row + 1) +
+                    ". Click Confirm Shot to fire.";
             }
+
             else
             {
                 // Bottom board is for ship placement
@@ -312,8 +359,31 @@ namespace Game_Battleship
                 {
                     foreach (int[] cell in positions)
                     {
-                        SetCellColor(1, false, cell[0], cell[1], Brushes.Snow);
-                    } 
+                        SetCellColor(displayedPlayer, false, cell[0], cell[1], Brushes.Snow);
+                    }
+
+                    // Count successfully placed ships
+                    if (displayedPlayer == 1)
+                    {
+                        player1ShipsPlaced++;
+
+                        if (player1ShipsPlaced >= 5)
+                        {
+                            player1PlacementReady = true;
+                        }
+                    }
+                    else
+                    {
+                        player2ShipsPlaced++;
+
+                        if (player2ShipsPlaced >= 5)
+                        {
+                            player2PlacementReady = true;
+                        }
+                    }
+
+                    // Update the Start Battle button
+                    UpdateStartButton();
                 }
 
                 StatusText.Text =
@@ -326,19 +396,93 @@ namespace Game_Battleship
             //game.SwitchTurn();
         }
 
+
+        private void ConfirmShotButton_Click(
+            object sender, RoutedEventArgs e)
+        {
+            // Make sure a square was selected
+            if (selectedShotRow == -1 || selectedShotCol == -1)
+            {
+                return;
+            }
+
+            // Save the selected position
+            int row = selectedShotRow;
+            int col = selectedShotCol;
+
+            // Clear the selection
+            selectedShotRow = -1;
+            selectedShotCol = -1;
+
+            ConfirmShotButton.IsEnabled = false;
+
+            // Use the team's existing attack method
+            game.currentplayer.Attack(
+                row, col, game.currentplayer.board.p2_board);
+
+            // Display the result on the attack grid
+            DisplayAttackResult(
+                displayedPlayer,
+                row,
+                col,
+                game.currentplayer.board.p2_board[row, col].isHit);
+
+            // Lock additional shots for this turn
+            shotFiredThisTurn = true;
+            ConfirmShotButton.IsEnabled = false;
+        }
+
+
+        // Check whether both players have placed their ships
+        private void UpdateStartButton()
+        {
+            // TEMPORARY: Only require Player 1's ships
+            // TODO: Require both players before final submission
+
+            StartButton.IsEnabled =
+                player1PlacementReady;
+
+            // && player2PlacementReady
+        }
+
+        // Count successful ship placements
+        private int player1ShipsPlaced = 0;
+        private int player2ShipsPlaced = 0;
+        
+
         // Start game button
         private void StartButton_Click(
             object sender, RoutedEventArgs e)
         {
-            // Connect to Game.startGame()
+            // Start the game
             game.StartGame();
 
             game.p1.board.p2_board = game.p2.board.p1_board;
 
-            StatusText.Text = "Start Game selected.";
+            // Show the attack boards
+            Player1AttackPanel.Visibility = Visibility.Visible;
+            Player2AttackPanel.Visibility = Visibility.Visible;
 
-            StartButton.IsEnabled = false;
+            // Allow players to select targets
+            Player1TopGrid.IsEnabled = true;
+            Player2TopGrid.IsEnabled = true;
+
+            // Hide ship placement controls
+            ShipPlacementControls.Visibility = Visibility.Collapsed;
+
+            // Show the Confirm Shot button
+            ConfirmShotButton.Visibility = Visibility.Visible;
+            ConfirmShotButton.IsEnabled = false;
+
+            // Hide Start Battle
+            StartButton.Visibility = Visibility.Collapsed;
+
+            StatusText.Text = "Select a square on the Target Grid.";
+
+            // Show End Turn during gameplay
+            EndTurnButton.Visibility = Visibility.Visible;
         }
+
 
         // Show the turn switching screen
         public void ShowTurnOverlay(
@@ -372,6 +516,14 @@ namespace Game_Battleship
         public void RevealBoards()
         {
             ShowPlayerBoards(nextDisplayedPlayer);
+
+            // Allow the next player to fire
+            shotFiredThisTurn = false;
+
+            // Clear the previous player's shot selection
+            selectedShotRow = -1;
+            selectedShotCol = -1;
+            ConfirmShotButton.IsEnabled = false;
 
             TurnOverlay.Visibility = Visibility.Collapsed;
             TopControls.IsEnabled = true;
@@ -418,7 +570,7 @@ namespace Game_Battleship
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            game = new Game(this);
+            game = new Game(this, player1Name, player2Name);
         }
     }
 }

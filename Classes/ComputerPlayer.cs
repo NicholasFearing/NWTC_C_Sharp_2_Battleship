@@ -21,15 +21,13 @@ namespace Game_Battleship
 
         private Random rng = new Random();
 
-        public ComputerPlayer(MainWindow main, string difficulty) : base(main)
+        //methods
+        public ComputerPlayer(MainWindow main, string difficulty)
+            : base(main, "Computer")
         {
             //constructor
             this.difficulty = difficulty;
         }
-
-        //methods
-        public void SetDifficulty(string difficulty)
-        { }
 
         /*TODO public (int row, int col) ChooseAttack()
         { }*/
